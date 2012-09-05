@@ -17,7 +17,11 @@ class Ec2Command
     end
     def ssh
         server = @servers[0]
-        system("ssh -i ~/.ssh/#{server.key_name} #{ARGV[2]}@#{server.public_ip_address}")
+        exec = ""
+        if ARGV[3]
+            exec = "\"#{ARGV[3]}\"" 
+        end
+        system("ssh -i ~/.ssh/#{server.key_name} #{ARGV[2]}@#{server.public_ip_address} #{exec}")
     end
     def show
         puts @servers[0].inspect
