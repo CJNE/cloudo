@@ -4,7 +4,7 @@ require 'optparse'
 require 'ec2command.rb'
 options = {}
 optparse = OptionParser.new do |opts|
-  opts.banner = "Usage: ec2.rb [options] command"
+  opts.banner = "Usage: ec2.rb [options] command [index]"
   options[:verbose] = false
   opts.on('-v', '--verbose', 'Output more information') do
     options[:verbose] = true
@@ -16,6 +16,10 @@ optparse = OptionParser.new do |opts|
   options[:region] = nil
   opts.on('-r', '--region REGION','What region to use (us-east-1, eu-west-1 etc)') do |region|
     options[:region] = region
+  end
+  options[:name] = nil
+  opts.on('-n', '--name NAME', 'Operate on instance with tag Name = NAME') do |name|
+    options[:name] = name
   end
   opts.on('-h', '--help', 'Display help') do
     puts opts
@@ -31,5 +35,5 @@ end
 
 puts "Using credential #{options[:credential]}" if options[:verbose]
 puts "Region: #{options[:region]}" if options[:region]
-instance = Ec2Command.new options
+instance = Ec2Command.new options, ARGV
 instance.send(command)
