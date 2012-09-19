@@ -9,10 +9,10 @@ class Ec2Command
     fog_opts = { provider: 'AWS' }
     fog_opts[:region] = options[:region] if options[:region]
     @provider= Fog::Compute.new(fog_opts)
-    @index = options[:index] || 0
     @servers = options[:name] ? @provider.servers.all('tag:Name' => options[:name]) : @provider.servers 
   end
   def parse_index
+    raise "No index paramter given" unless @args[1].to_i
     @args[1].to_i - 1
   end
   def method_missing(m, *args, &block)
@@ -30,6 +30,16 @@ class Ec2Command
     index = parse_index
     puts @servers[index].inspect
   end
+  def start
+    index = parse_index
+    puts "Starting instance #{@servers[index].id}"
+    @servers[index].start
+  end
+  def stop
+    index = parse_index
+    puts "Stopping instance #{@servers[index].id}"
+    @servers[index].stop
+  end
   def find
     server = _find(@args[1])[0]
     puts server.inspect
@@ -38,7 +48,7 @@ class Ec2Command
     index = 1
     @servers.each do |server| 
       name = server.tags["Name"] || server.id
-      puts "[#{index}] #{name} #{server.dns_name}"
+      puts "[#{index}] #{name} ID: #{server.id} State: #{server.state} DNS: #{server.dns_name}"
       index += 1
     end
   end
