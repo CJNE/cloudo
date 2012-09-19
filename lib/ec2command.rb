@@ -3,8 +3,11 @@ require 'fog'
 require 'active_support'
 
 class Ec2Command
-  def initialize()
-    @provider= Fog::Compute.new(:provider => 'AWS')
+  def initialize(options)
+    Fog::credential = options[:credential] if options[:credential]
+    fog_opts = {provider: 'AWS'}
+    fog_opts[:region] = options[:region] if options[:region]
+    @provider= Fog::Compute.new(fog_opts)
     @servers = ARGV[1].nil? ? @provider.servers : @provider.servers.all('tag:Name' => ARGV[1])
   end
   def method_missing(m, *args, &block)
