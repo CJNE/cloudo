@@ -5,6 +5,8 @@ require 'ec2command.rb'
 options = {}
 optparse = OptionParser.new do |opts|
   opts.banner = "Usage: ec2.rb [options] command [index]"
+  opts.separator ""
+  opts.separator "Options:"
   options[:verbose] = false
   opts.on('-v', '--verbose', 'Output more information') do
     options[:verbose] = true
@@ -21,7 +23,7 @@ optparse = OptionParser.new do |opts|
   opts.on('-n', '--name NAME', 'Operate on instance with tag Name = NAME') do |name|
     options[:name] = name
   end
-  opts.on('-h', '--help', 'Display help') do
+  opts.on_tail('-h', '--help', 'Display help') do
     puts opts
     exit
   end
@@ -30,10 +32,16 @@ optparse.parse!
 command = ARGV[0]
 if( !command) then
   puts optparse.banner
-  exit 1  
+  exit 1
 end
 
 puts "Using credential #{options[:credential]}" if options[:verbose]
-puts "Region: #{options[:region]}" if options[:region]
-instance = Ec2Command.new options, ARGV
-instance.send(command)
+puts "Region: #{options[:region]}" if options[:verbose]
+begin
+  instance = Ec2Command.new options, ARGV
+  instance.send(command)
+rescue
+  puts $!
+  puts optparse.banner
+  exit 1
+end
