@@ -28,7 +28,7 @@ optparse = OptionParser.new do |opts|
     exit
   end
 end
-optparse.parse!
+optparse.order!
 command = ARGV[0]
 if( !command) then
   puts optparse.banner

@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'fog'
 require 'active_support'
+require "ssh"
 
 class Ec2Command
   def initialize(options, args)
@@ -34,8 +35,10 @@ class Ec2Command
     @servers.select {|s| s.tags["Name"].include? name}
   end
   def ssh
-    server = parse_instance
-    system("ssh -i ~/.ssh/#{server.key_name} #{ARGV[2]}@#{server.public_ip_address}")
+    require @args[0]
+    Ssh.new(@args)
+    # server = parse_instance
+    # system("ssh -i ~/.ssh/#{server.key_name} #{ARGV[2]}@#{server.public_ip_address}")
   end
   def show
     server = parse_instance
@@ -51,8 +54,7 @@ class Ec2Command
     puts "Stopping instance #{server.id}"
     server.stop
   end
-  def find
-    server = _find(@args[1])[0]
+  def find server = _find(@args[1])[0]
     puts server.inspect
   end
   def list
