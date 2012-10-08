@@ -1,7 +1,6 @@
 require 'rubygems'
 require 'fog'
 require 'active_support'
-require "ssh"
 
 class Ec2Command
   def initialize(options, args)
@@ -35,14 +34,12 @@ class Ec2Command
     @servers.select {|s| s.tags["Name"].include? name}
   end
   def ssh
-    require @args[0]
-    Ssh.new(@args)
-    # server = parse_instance
-    # system("ssh -i ~/.ssh/#{server.key_name} #{ARGV[2]}@#{server.public_ip_address}")
+    require 'ssh'
+    Ssh.new(@args).execute @provider
   end
   def show
-    server = parse_instance
-    puts server.inspect
+    require 'show'
+    Show.new(@args).execute @provider
   end
   def start
     server = parse_instance
