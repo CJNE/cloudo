@@ -1,10 +1,22 @@
 #!/usr/bin/env ruby
 $LOAD_PATH << './lib'
 require 'optparse'
-require 'ec2command.rb'
+require 'ec2commands.rb'
+require 'rubygems'
+require 'fog'
+
+# Find all available commands 
+commands = Ec2Commands.constants.find_all do |item|
+  !item.to_s.eql? "Command"
+end
+help_commands = commands.join(" ").downcase
+
+# Parse options
 options = {}
 optparse = OptionParser.new do |opts|
   opts.banner = "Usage: #{$0} [options] command [index]"
+  opts.separator ""
+  opts.separator "Commands: " + help_commands
   opts.separator ""
   opts.separator "Options:"
   options[:verbose] = false
@@ -29,20 +41,24 @@ optparse = OptionParser.new do |opts|
   # end
 end
 optparse.order!
+
 command = ARGV[0]
-if( !command) then
+unless command && commands.include?(command.capitalize.to_sym)
   puts optparse.banner
+  puts "Available commands: #{help_commands}"
   exit 1
 end
+command = command.capitalize.to_sym
 
+#Set up fog
 puts "Using credential #{options[:credential]}" if options[:verbose]
 puts "Region: #{options[:region]}" if options[:verbose]
+Fog::credential = options[:credential] if options[:credential]
+fog_opts = { provider: 'AWS' }
+fog_opts[:region] = options[:region] if options[:region]
+provider= Fog::Compute.new(fog_opts)
 
-begin
-  instance = Ec2Command.new options, ARGV
-  instance.send(command)
-rescue
-  puts $!
-  puts optparse.banner
-  exit 1
-end
+#Execute command
+klass = Ec2Commands.const_get(command)
+klass.new(ARGV).execute(provider)
+

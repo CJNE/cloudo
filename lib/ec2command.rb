@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'fog'
 require 'active_support'
-
+require 'ec2commands'
 class Ec2Command
   def initialize(options, args)
     @args = args
@@ -34,12 +34,10 @@ class Ec2Command
     @servers.select {|s| s.tags["Name"].include? name}
   end
   def ssh
-    require 'ssh'
-    Ssh.new(@args).execute @provider
+    Ec2Commands::Ssh.new(@args).execute @provider
   end
   def show
-    require 'show'
-    Show.new(@args).execute @provider
+    Ec2Commands::Show.new(@args).execute @provider
   end
   def start
     server = parse_instance
@@ -55,12 +53,7 @@ class Ec2Command
     puts server.inspect
   end
   def list
-    index = 1
-    @provider.servers.all.each do |server| 
-      name = server.tags["Name"] || server.id
-      puts "[#{index}] #{name} ID: #{server.id} State: #{server.state} DNS: #{server.dns_name}"
-      index += 1
-    end
+    Ec2Commands::List.new(@args).execute @provider
   end
   private
   def is_numeric?(obj) 
