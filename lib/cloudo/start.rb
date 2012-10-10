@@ -1,8 +1,8 @@
-module Ec2Commands
+module Cloudo
   class Start < Command
     def initialize(args, options)
       @base_options = options
-      @banner = "Usage: ec2 start <identifier>"
+      @banner = "Usage: cloudo start <identifier>"
       parse_args args 
       @instance_id = args[1]
       if !@instance_id

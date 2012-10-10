@@ -1,4 +1,4 @@
-module Ec2Commands
+module Cloudo
   class Command
     def initialize(options)
       parse_args options

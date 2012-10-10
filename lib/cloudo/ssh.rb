@@ -1,8 +1,8 @@
-module Ec2Commands
+module Cloudo
   class Ssh < Command
     def initialize(args, options)
       @base_options = options
-      @banner = "Usage: ec2 ssh [options] [user@]identifier"
+      @banner = "Usage: cloudo ssh [options] [user@]identifier"
       parse_args args do |opts|
         opts.on('-t', '--tmux') do
           @options[:tmux] = true

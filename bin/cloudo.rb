@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
 require 'optparse'
-require_relative '../lib/ec2commands.rb'
+require_relative '../lib/cloudo.rb'
 require 'rubygems'
 require 'fog'
 
 # Find all available commands 
-commands = Ec2Commands.constants.find_all do |item|
+commands = Cloudo.constants.find_all do |item|
   !item.to_s.eql? "Command"
 end
 help_commands = commands.join(" ").downcase
@@ -54,5 +54,5 @@ fog_opts[:region] = options[:region] if options[:region]
 provider= Fog::Compute.new(fog_opts)
 
 #Execute command
-klass = Ec2Commands.const_get(command)
+klass = Cloudo.const_get(command)
 klass.new(ARGV, options).execute(provider)

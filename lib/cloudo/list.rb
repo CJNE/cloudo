@@ -1,8 +1,8 @@
-module Ec2Commands
+module Cloudo
   class List < Command
     def initialize(args, options)
       @base_options = options
-      @banner = "Usage: ec2 list [options]"
+      @banner = "Usage: cloudo list [options]"
       parse_args args do |opts|
         @options['colors'] = true
         opts.on('-c', '--color', 'Display colors (default)') do

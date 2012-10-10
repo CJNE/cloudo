@@ -1,8 +1,8 @@
-module Ec2Commands
+module Cloudo
   class Show < Command
     def initialize(args, options)
       @base_options = options
-      @banner = 'Usage: ec2 show [options]'
+      @banner = 'Usage: cloudo show [options]'
       parse_args args
       @instance_id = args[1]
     end
