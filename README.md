@@ -33,6 +33,8 @@ to use if there are multiple credentials in the .fog file.
 
 The ssh executable needs to be in your path for the ssh command
 to work.
+It is also assumed that the private key is named the same as the ec2 key name + .pem
+and resides in ~/.ssh
 
 Usage
 =====
@@ -59,9 +61,11 @@ instead of the index you can use the Name tag for the instance:
 The user part is optional, if ommitted you will connect as the current user.
 
 Run 
+
     ec2 -h 
     
 to list all available optoins and commands.
 
 For more help on a given command run 
+
     ec2 <command> -h
