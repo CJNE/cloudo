@@ -1,8 +1,8 @@
 module Ec2Commands
-  require 'ec2commands/command'
-  require 'ec2commands/list'
-  require 'ec2commands/ssh'
-  require 'ec2commands/show'
-  require 'ec2commands/start'
-  require 'ec2commands/stop'
+  require_relative 'ec2commands/command'
+  require_relative 'ec2commands/list'
+  require_relative 'ec2commands/ssh'
+  require_relative 'ec2commands/show'
+  require_relative 'ec2commands/start'
+  require_relative 'ec2commands/stop'
 end

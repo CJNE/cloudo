@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
-$LOAD_PATH << './lib'
 require 'optparse'
-require 'ec2commands.rb'
+require_relative '../lib/ec2commands.rb'
 require 'rubygems'
 require 'fog'
 
@@ -31,10 +30,6 @@ optparse = OptionParser.new do |opts|
   opts.on('-r', '--region REGION','What region to use (us-east-1, eu-west-1 etc)') do |region|
     options[:region] = region
   end
-  options[:name] = nil
-  opts.on('-n', '--name NAME', 'Operate on instance with tag Name = NAME') do |name|
-    options[:name] = name
-  end
   opts.on('-h', '--help', 'Display help') do
     puts opts
     exit
@@ -52,7 +47,7 @@ command = command.capitalize.to_sym
 
 #Set up fog
 puts "Using credential #{options[:credential]}" if options[:verbose]
-puts "Region: #{options[:region]}" if options[:verbose]
+puts "Region: #{options[:region]}" if options[:verbose] && options[:region]
 Fog::credential = options[:credential] if options[:credential]
 fog_opts = { provider: 'AWS' }
 fog_opts[:region] = options[:region] if options[:region]
