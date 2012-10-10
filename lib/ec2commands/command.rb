@@ -4,6 +4,7 @@ module Ec2Commands
       parse_args options
     end
 
+    protected
     def parse_args(args, &block)
       @options = {}
       @optparse = OptionParser.new do |opts|
@@ -16,6 +17,7 @@ module Ec2Commands
       end
       @optparse.parse!(args)
     end
+
     def get_instance(provider, instance_id)
       raise "No index/name paramter given, use the list command to find out what index paramter to use or specify the instance name" if instance_id.nil?
       server = nil
@@ -27,6 +29,11 @@ module Ec2Commands
       end
       server
     end
+
+    def find_instances(provider, name)
+      provider.servers.select {|s| s.tags["Name"].include? name}
+    end
+
     private
     def is_numeric?(obj) 
       obj.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil ? false : true

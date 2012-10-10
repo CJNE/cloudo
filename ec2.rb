@@ -35,10 +35,10 @@ optparse = OptionParser.new do |opts|
   opts.on('-n', '--name NAME', 'Operate on instance with tag Name = NAME') do |name|
     options[:name] = name
   end
-  # opts.on_tail('-h', '--help', 'Display help') do
-  #   puts opts
-  #   exit
-  # end
+  opts.on('-h', '--help', 'Display help') do
+    puts opts
+    exit
+  end
 end
 optparse.order!
 
@@ -60,5 +60,4 @@ provider= Fog::Compute.new(fog_opts)
 
 #Execute command
 klass = Ec2Commands.const_get(command)
-klass.new(ARGV).execute(provider)
-
+klass.new(ARGV, options).execute(provider)

@@ -1,6 +1,7 @@
 module Ec2Commands
   class List < Command
-    def initialize(args)
+    def initialize(args, options)
+      @base_options = options
       @banner = "Usage: ec2 list [options]"
       parse_args args do |opts|
         @options['colors'] = true

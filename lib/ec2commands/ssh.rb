@@ -1,6 +1,7 @@
 module Ec2Commands
   class Ssh < Command
-    def initialize(args)
+    def initialize(args, options)
+      @base_options = options
       @banner = "Usage: ec2 ssh [options] [user@]identifier"
       parse_args args do |opts|
         opts.on('-t', '--tmux') do
@@ -21,8 +22,8 @@ module Ec2Commands
     def execute(provider)
       server = get_instance provider, @instance_id 
       exe = "ssh -i ~/.ssh/#{server.key_name} #{@user}#{server.public_ip_address}"
-      puts exe
-      #system exe
+      # puts exe
+      system exe
     end
   end
 end
