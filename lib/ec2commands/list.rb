@@ -24,7 +24,7 @@ module Ec2Commands
     
     def print_server(server, index)
       name = server.tags["Name"] || server.id
-      puts "[#{index}] #{name} ID: #{server.id} State: #{server.state} DNS: #{server.dns_name}"
+      puts "[#{index.to_s.rjust 3}] #{server.id} #{name.ljust 20} #{server.state.ljust 10} #{server.dns_name}"
     end
   end
 end
