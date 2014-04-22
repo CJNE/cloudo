@@ -23,8 +23,9 @@ module Cloudo
     end
     
     def print_server(server, index)
-      name = server.tags["Name"] || server.id
+      name = server.tags["Name"] || server.tags["aws:autoscaling:groupName"] || server.id
       puts "[#{index.to_s.rjust 3}] #{server.id} #{name.ljust 20} #{server.state.ljust 10} #{server.dns_name}"
+      #puts server.inspect
     end
   end
 end

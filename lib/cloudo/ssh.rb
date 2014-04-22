@@ -36,8 +36,7 @@ module Cloudo
       if @ssh_options[:key].length > 0
         exe << "-i #{@ssh_options[:key]} "
       elsif !@ssh_options[:use_password]
-        puts "nay"
-        exe << "-i .ssh/#{server.key_name} "
+        exe << "-i ~/.ssh/#{server.key_name} "
       end
       exe << "#{@user}#{server.public_ip_address}"
       system exe
